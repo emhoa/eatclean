@@ -31,11 +31,13 @@ def bulkInsert():
        	try:
                	conn = psycopg2.connect(database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
         except Exception as e:
-       	        print "Unable to connect to the database"
+       	        print "Unable to connect to the database: " + str(e)
 	cur = conn.cursor()
 	
 	try:
 		cur.execute(select_query)
+	except Exception as e:
+		print "Error in executing (" + select_query + "): " + str(e)
 
 	mexican_eateries = ""
 	for (dba, building, street, boro, phone, score, grade, grade_date) in cur:
