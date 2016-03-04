@@ -45,7 +45,18 @@ def bulkInsert():
                	conn = psycopg2.connect(database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
         except Exception as e:
        	        print "Unable to connect to the database"
-               
+		exit()
+        
+	create_lock_table_query = "create table if not exists restaurant_data_available (yes int); update restaurant_data_available set yes = 0;"
+	lock_cur = conn.cursor()
+
+	try:
+		lock_cur.execute(create_lock_table_query)
+	except Exception as e:
+		print "Unable to update lock table"
+		exit()
+	conn.commit()
+
         #Open restaurant data file and peak at first line to find column names
        	print get_timestamp() + ": Opening file to find column names"
         restaurant_file = open(RESTAURANT_DEST_FILE, "rb")
@@ -155,6 +166,15 @@ def bulkInsert():
         print get_timestamp() + ": Created restaurant grades table"
 
        	restgrades_cur.close()
+
+	lift_lock_cur = conn.cursor()
+
+	try:
+		lift_lock_cur.execute("update restaurant_data_available set yes = 1;")
+	except Exception as e:
+		print get_timestamp() + ": Could not release lock on restaurant_data_available"
+
+	lift_lock_cur.close()
         conn.commit()
        	conn.close()
 

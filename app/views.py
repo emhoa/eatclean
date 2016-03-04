@@ -33,14 +33,29 @@ def bulkInsert():
         except Exception as e:
        	        print "Unable to connect to the database: " + str(e)
 	cur = conn.cursor()
+
+	try:
+		cur.execute("select yes from restaurant_data_available;")
+	except Exception as e:
+		errormsg = "Latest restaurant data is still in the process of being loaded"
+		print errormsg
+		return render_template(("bulkInsertGradesResults.html", outcome=errormsg)
 	
 	try:
 		cur.execute(select_query)
 	except Exception as e:
 		print "Error in executing (" + select_query + "): " + str(e)
+		return render_template("bulkInsertGradesResults.html", outcome="Data on restaurant grades is still in the process of being uploaded. Please check back later.")
+
+	for (yes) in cur:
+		if yes == 0:
+			return render_template("bulkInsertGradesResults.html", outcome="Data on restaurant grades is still in the process of being uploaded. Please check back later.")
+
+	cur.close()
+	select_cur = conn.cursor()
 
 	mexican_eateries = ""
-	for (dba, building, street, boro, phone, score, grade, grade_date) in cur:
-		mexican_eateries += "{}, {} {} in {} (tel: {}) (Grade: {} on {%b/%d/%Y} Score: {})\n".format(dba, building, street, boro, phone, grade, grade_date, score) 
+	for (dba, building, street, boro, phone, score, grade, grade_date) in select_cur:
+		mexican_eateries += "{}, {} {} in {} (tel: {}) (Grade: {} on {%m/%d/%Y} Score: {})\n".format(dba, building, street, boro, phone, grade, grade_date, score) 
 	return render_template("bulkInsertGradesResults.html", outcome=Markup(mexican_eateries))
 
