@@ -72,7 +72,7 @@ def bulkInsert():
 
 	i=0
 	collen = len(columns)
-	insert_stmt = "COPY " + DOWNLOAD_DATA_TABLE + " ("
+	insert_stmt = "\copy " + DOWNLOAD_DATA_TABLE + " ("
 
 	#Add an _ to column names with spaces in them to make them sql-safe
 	#concatenate columns to build sql statement to create table and bulk copy
