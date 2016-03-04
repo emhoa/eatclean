@@ -72,7 +72,7 @@ def bulkInsert():
 
 	i=0
 	collen = len(columns)
-	insert_stmt = "\copy " + DOWNLOAD_DATA_TABLE + " ("
+	insert_stmt = """\copy """ + DOWNLOAD_DATA_TABLE + " ("
 
 	#Add an _ to column names with spaces in them to make them sql-safe
 	#concatenate columns to build sql statement to create table and bulk copy
@@ -95,7 +95,9 @@ def bulkInsert():
 	create_table_query += """);"""
 
 	# complete insert_stmt so that it can read from the csv file
-	insert_stmt += ") FROM '" + RESTAURANT_DEST_FILE +"""' with (FORMAT CSV, HEADER, QUOTE '"');"""
+	#insert_stmt += ") FROM '" + RESTAURANT_DEST_FILE +"""' with (FORMAT CSV, HEADER, QUOTE '"');"""
+	insert_stmt += ") FROM " + RESTAURANT_DEST_FILE +""" with (CSV QUOTE '"')"""
+
 	add_pkey = "ALTER TABLE " + DOWNLOAD_DATA_TABLE + " ADD PRIMARY KEY (id);"
 	analyze_query = "ANALYZE " + DOWNLOAD_DATA_TABLE + ";"
 
