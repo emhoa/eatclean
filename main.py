@@ -11,8 +11,6 @@ from csv import reader
 import datetime
  
 class MainHandler(tornado.web.RequestHandler):
-	def get(self):
-        	self.write("Hi world"tamp():
 
 	def get_timestamp():
 	        return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
