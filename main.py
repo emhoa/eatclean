@@ -111,7 +111,7 @@ def bulkInsert():
                 except Exception as e:
        	                errormsg = get_timestamp() + ": Failed to insert record " + ",".join(line) + ") with error: " + str(e) + "\n"
                	        print errormsg
-               restaurant_file.close()
+	restaurant_file.close()
 
        	#Also prepare quriers to add primary key and run an analyze after bulk upload of data
         add_pkey = "ALTER TABLE " + DOWNLOAD_DATA_TABLE + " ADD PRIMARY KEY (id);"
