@@ -26,8 +26,7 @@ def bulkInsert():
  	#Connect to postgres database
 
        	urlparse.uses_netloc.append("postgres")
-        url = urlparse.urlparse(os.environ["DATABASE_U
-RL"])
+        url = urlparse.urlparse(os.environ["DATABASE_URL"])
 
        	try:
                	conn = psycopg2.connect(database=url.p
