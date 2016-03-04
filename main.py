@@ -4,7 +4,7 @@ import tornado.ioloop
 from tornado.web import FallbackHandler, RequestHandler, Application 
 from tornado.wsgi import WSGIContainer
 from app import app
-mport psycopg2
+import psycopg2
 import urlparse
 import requests
 from csv import reader
