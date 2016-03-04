@@ -60,6 +60,6 @@ def bulkInsert():
 
 	mexican_eateries = ""
 	for (dba, building, street, boro, phone, score, grade, grade_date) in select_cur:
-		mexican_eateries += "{}, {} {} in {} (tel: {}) (Grade: {} on {%m/%d/%Y} Score: {})\n".format(dba, building, street, boro, phone, grade, grade_date, score) 
+		mexican_eateries += "{}, {} {} in {} (tel: {}) (Grade: {} Score: {})\n".format(dba, building, street, boro, phone, grade, score) 
 	return render_template("bulkInsertGradesResults.html", outcome=Markup(mexican_eateries))
 
