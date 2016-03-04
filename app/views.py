@@ -39,7 +39,7 @@ def bulkInsert():
 	except Exception as e:
 		errormsg = "Latest restaurant data is still in the process of being loaded"
 		print errormsg
-		return render_template(("bulkInsertGradesResults.html", outcome=errormsg)
+		return render_template("bulkInsertGradesResults.html", outcome=errormsg)
 	
 	try:
 		cur.execute(select_query)
