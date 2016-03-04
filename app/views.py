@@ -29,12 +29,9 @@ def bulkInsert():
         url = urlparse.urlparse(os.environ["DATABASE_URL"])
 
        	try:
-               	conn = psycopg2.connect(database=url.p
-ath[1:], user=url.username, password=url.password, hos
-t=url.hostname, port=url.port)
+               	conn = psycopg2.connect(database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
         except Exception as e:
-       	        print "Unable to connect to the databa
-se"
+       	        print "Unable to connect to the database"
 	cur = conn.cursor()
 	cur.execute(select_query)
 
