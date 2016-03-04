@@ -28,6 +28,7 @@ def bulkInsert():
 	RESTAURANT_SOURCE_FILE="https://nycopendata.socrata.com/api/views/xx67-kt59/rows.csv?accessType=DOWNLOAD"
 	RESTAURANT_DEST_FILE="/tmp/" + "restaurantgrades" + datetime.datetime.now().strftime("%Y-%m-%d") + ".csv"
 	DOWNLOAD_DATA_TABLE="input_data"
+	errormsgs = ""
 
 	#Download the restaurant data file from NYC site
 	print get_timestamp() + ": Starting download of source data file"
@@ -127,13 +128,11 @@ def bulkInsert():
 		record_tuple = tuple(line)
 		
 		try:
-			#insert_cur.execute(insert_stmt + add_pkey + analyze_query)
-			print record_tuple
 			insert_cur.execute(insert_stmt, record_tuple)
 		except Exception as e:
-			#print get_timestamp() + ": Unable to create table and bulk upload"
-			print get_timestamp() + ": Bulk insert failed"
-			return render_template("bulkInsertGradesResults.html", outcome="failed on record (" + ",".join(line) + ") with error: " + str(e))
+			errormsg = get_timestamp() + ": Failed to insert record " + ",".join(line) + ") with error: " + str(e) + "\n"
+			print errormsg
+			errormsgs += errormsg
 
 	restaurant_file.close()
 
@@ -188,6 +187,7 @@ def bulkInsert():
 	restgrades_cur.close()
 	conn.commit()
 	conn.close()
-
-	return render_template("bulkInsertGrades.html", outcome="succeeded!")
+	if errormsgs == "":
+		return render_template("bulkInsertGrades.html", outcome="succeeded with no errors!")
+	return render_template("bulkInsertGrades.html", outcome="finished with some errors: " + errormsgs)
 
