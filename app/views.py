@@ -110,6 +110,10 @@ def bulkInsert():
 		cur.execute(create_table_query)
 	except:
 		print "Couldn't even create table"
+	try:
+		conn.commit()
+	except:
+		print "Can't commit dropping table and recreating it"
 
 	insert_cur = conn.cursor()
 
