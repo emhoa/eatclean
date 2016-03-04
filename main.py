@@ -163,6 +163,8 @@ def bulkInsert():
 
 
 class MainHandler(tornado.web.RequestHandler):
+	def get(self):
+		self.write("This message comes from Tornado ^_^")
 
 	 
 def main():
