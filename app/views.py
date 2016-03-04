@@ -9,20 +9,25 @@ import requests
 from csv import reader
 import datetime
 from app import app
+from flask import render_template
+from flask import request
 
 @app.route('/')
-@app.route('/index')
+@app.route('/restaurants')
 def index():
 	return render_template("bulkInsertGrades.html")
 
+@app.route('/test')
+def mytest():
+	return render_template("bulkInsertGrades.html")
 
 def get_timestamp(): 
 	return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
-@app.route('/', methods=['POST'])
+@app.route('/restaurants', methods=['POST'])
 def bulkInsert():
-
+	print "in bulk insert"
 	RESTAURANT_SOURCE_FILE="https://nycopendata.socrata.com/api/views/xx67-kt59/rows.csv?accessType=DOWNLOAD"
 	RESTAURANT_DEST_FILE="/tmp/" + "restaurantgrades" + str(datetime.datetime.today()) + ".csv"
 	DOWNLOAD_DATA_TABLE="input_data"
@@ -33,7 +38,7 @@ def bulkInsert():
 
 	try:
 #	conn = psycopg2.connect("dbname='restaurantgrades' user='postgres' host='localhost' password='postgres'")
-		conn = psycopg2.connect(database=url.path:[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
+		conn = psycopg2.connect(database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
 	except:
 		print "Unable to connect to the database"
 		return render_template("bulkInsertGrades.html")
