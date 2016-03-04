@@ -66,7 +66,6 @@ def bulkInsert():
 	restaurant_file = open(RESTAURANT_DEST_FILE, "rb")
 
 	columns = restaurant_file.readline().split(",")
-	restaurant_file.close()
 
 	#Prepare three queries that will specify column names: drop, create and bulk copy
 	drop_table_query = """DROP table if exists """ + DOWNLOAD_DATA_TABLE + ";"""
@@ -122,7 +121,7 @@ def bulkInsert():
 	print get_timestamp() + ": Now preparing to insert rows into " + DOWNLOAD_DATA_TABLE + "\n"
 	print insert_stmt
 
-	records = reader(RESTAURANT_DEST_FILE, delimiter=',', quotechar='"')
+	records = reader(restaurant_file, delimiter=',', quotechar='"')
 
 	for line in records:
 		record_tuple = tuple(line)
@@ -135,6 +134,8 @@ def bulkInsert():
 			#print get_timestamp() + ": Unable to create table and bulk upload"
 			print get_timestamp() + ": Bulk insert failed"
 			return render_template("bulkInsertGradesResults.html", outcome="failed on record (" + ",".join(line) + ") with error: " + str(e))
+
+	restaurant_file.close()
 
 	#Also prepare quriers to add primary key and run an analyze after bulk upload of data
 	add_pkey = "ALTER TABLE " + DOWNLOAD_DATA_TABLE + " ADD PRIMARY KEY (id);"
