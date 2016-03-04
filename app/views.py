@@ -29,7 +29,7 @@ def get_timestamp():
 def bulkInsert():
 	print "in bulk insert"
 	RESTAURANT_SOURCE_FILE="https://nycopendata.socrata.com/api/views/xx67-kt59/rows.csv?accessType=DOWNLOAD"
-	RESTAURANT_DEST_FILE="/tmp/" + "restaurantgrades" + str(datetime.datetime.today()) + ".csv"
+	RESTAURANT_DEST_FILE="/tmp/" + "restaurantgrades" + str(datetime.datetime.now().strftime("%Y-%m-%d") + ".csv"
 	DOWNLOAD_DATA_TABLE="input_data"
 
 
