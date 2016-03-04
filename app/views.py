@@ -118,17 +118,17 @@ def bulkInsert():
 		insert_cur.execute(insert_stmt)
 	except:
 		#print get_timestamp() + ": Unable to create table and bulk upload"
-		print get_timestamp() + ": Unable to bulk upload")
+		print get_timestamp() + ": Unable to bulk upload"
 
 	try:
 		insert_cur.execute(add_pkey)
 	except:
-		print get_timestamp() + ": Unable to add primary key")
+		print get_timestamp() + ": Unable to add primary key"
 
 	try:
 		insert_cur.execute(analyze_query)
 	except:
-		print get_timestamp() + ": Unable to analyze table")
+		print get_timestamp() + ": Unable to analyze table"
 
 	return render_template("bulkInsertGrades.html")
 
