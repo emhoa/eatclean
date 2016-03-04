@@ -120,9 +120,9 @@ def bulkInsert():
 	try:
 		#insert_cur.execute(insert_stmt + add_pkey + analyze_query)
 		insert_cur.execute(insert_stmt)
-	except:
+	except Exception as e:
 		#print get_timestamp() + ": Unable to create table and bulk upload"
-		print get_timestamp() + ": Unable to bulk upload"
+		print get_timestamp() + ": Unable to bulk upload with error: " + str(e)
 
 	try:
 		insert_cur.execute(add_pkey)
