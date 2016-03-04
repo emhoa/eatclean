@@ -96,7 +96,7 @@ def bulkInsert():
 
 	# complete insert_stmt so that it can read from the csv file
 	#insert_stmt += ") FROM '" + RESTAURANT_DEST_FILE +"""' with (FORMAT CSV, HEADER, QUOTE '"');"""
-	insert_stmt += ") FROM " + RESTAURANT_DEST_FILE +""" with (CSV QUOTE '"')"""
+	insert_stmt += ") FROM " + RESTAURANT_DEST_FILE +""" with CSV QUOTE '"'"""
 	print "Copy string is: " + insert_stmt + "|"
 
 	add_pkey = "ALTER TABLE " + DOWNLOAD_DATA_TABLE + " ADD PRIMARY KEY (id);"
