@@ -90,7 +90,7 @@ def bulkInsert():
         try:
        	        insert_cur.execute(create_table_query)
         except Exception as e:
-       	        print "Couldn't even create table"
+       	        print "Couldn't create table"
                
 
         # complete insert_stmt so that it can read from the csv file
@@ -115,17 +115,17 @@ def bulkInsert():
 
        	#Also prepare quriers to add primary key and run an analyze after bulk upload of data
         add_pkey = "ALTER TABLE " + DOWNLOAD_DATA_TABLE + " ADD PRIMARY KEY (id);"
-       	analyze_query = "ANALYZE " + DOWNLOAD_DATA_TABLE + ";"
+#       	analyze_query = "ANALYZE " + DOWNLOAD_DATA_TABLE + ";"
 
         try:
        	        insert_cur.execute(add_pkey)
         except Exception as e:
        	        print get_timestamp() + ": Unable to add primary key"
                 
-        try:
-       	        insert_cur.execute(analyze_query)
-        except Exception as e:
-       	        print get_timestamp() + ": Unable to analyze table"
+#       try:
+#      	        insert_cur.execute(analyze_query)
+#        except Exception as e:
+#       	        print get_timestamp() + ": Unable to analyze table"
                 
         insert_cur.close()
        	print get_timestamp() + ": Finished with inserting into " + DOWNLOAD_DATA_TABLE + "\n"
