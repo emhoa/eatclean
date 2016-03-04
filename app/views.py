@@ -101,7 +101,10 @@ def bulkInsert():
 
 	print get_timestamp() + ": Now preparing to insert rows into " + DOWNLOAD_DATA_TABLE + "\n"
 	cur = conn.cursor()
-	cur.execute(drop_table_query)
+	try:
+		cur.execute(drop_table_query)
+	except:
+		print "Couldn't even drop table"
 
 	insert_cur = conn.cursor()
 
