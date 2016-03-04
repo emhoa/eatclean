@@ -100,6 +100,8 @@ def bulkInsert():
 	analyze_query = "ANALYZE " + DOWNLOAD_DATA_TABLE + ";"
 
 	print get_timestamp() + ": Now preparing to insert rows into " + DOWNLOAD_DATA_TABLE + "\n"
+	cur = conn.cursor()
+	cur.execute(drop_table_query)
 
 	insert_cur = conn.cursor()
 
