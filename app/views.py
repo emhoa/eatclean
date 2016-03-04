@@ -72,7 +72,7 @@ def bulkInsert():
 	drop_table_query = """DROP table if exists """ + DOWNLOAD_DATA_TABLE + ";"""
 	create_table_query = """CREATE table """ + DOWNLOAD_DATA_TABLE + """(id serial, """
 
-	insert_stmt = "copy " + DOWNLOAD_DATA_TABLE + " ("
+	insert_stmt = "insert into " + DOWNLOAD_DATA_TABLE + " ("
 
 	#Add an _ to column names with spaces in them to make them sql-safe
 	#concatenate columns to build sql statement to create table and bulk copy
@@ -96,20 +96,9 @@ def bulkInsert():
 
 	create_table_query += """);"""
 
-	# complete insert_stmt so that it can read from the csv file
-	#insert_stmt += ") FROM '" + RESTAURANT_DEST_FILE +"""' with (FORMAT CSV, HEADER, QUOTE '"');"""
-	#insert_stmt += ") FROM " + RESTAURANT_DEST_FILE +""" with CSV QUOTE '"'"""
-	insert_stmt = """\\copy input_data (CAMIS, DBA, BORO, BUILDING, STREET, ZIPCODE, PHONE, CUISINE_DESCRIPTION, INSPECTION_DATE, ACTION, VIOLATION_CODE, VIOLATION_DESCRIPTION, CRITICAL_FLAG, SCORE, GRADE, GRADE_DATE, RECORD_DATE, INSPECTION_TYPE) FROM '/tmp/restaurantgrades2016-03-04.csv' with CSV QUOTE '"';"""
-	print "Copy string is: " + insert_stmt + "|"
-
-	#Also prepare quriers to add primary key and run an analyze after bulk upload of data
-	add_pkey = "ALTER TABLE " + DOWNLOAD_DATA_TABLE + " ADD PRIMARY KEY (id);"
-	analyze_query = "ANALYZE " + DOWNLOAD_DATA_TABLE + ";"
-
-	print get_timestamp() + ": Now preparing to insert rows into " + DOWNLOAD_DATA_TABLE + "\n"
+	#Now perform queries to drop table, recreate, bulk copy, add primary key and run an analyze
 	insert_cur = conn.cursor()
 
-	#Now perform queries to drop table, recreate, bulk copy, add primary key and run an analyze
 	try:
 		insert_cur.execute(drop_table_query)
 	except Exception as e:
@@ -123,13 +112,31 @@ def bulkInsert():
 		return render_template("bulkInsertGradesResults.html", outcome="failed with error: " + str(e))
 
 
-	try:
-		#insert_cur.execute(insert_stmt + add_pkey + analyze_query)
-		insert_cur.execute(insert_stmt)
-	except Exception as e:
-		#print get_timestamp() + ": Unable to create table and bulk upload"
-		print get_timestamp() + ": Bulk insert failed"
-		return render_template("bulkInsertGradesResults.html", outcome="failed with error: " + str(e))
+
+	# complete insert_stmt so that it can read from the csv file
+	insert_stmt += ") values ("
+	for count in range(0, collen-1):
+		insert_stmt += "%s, "
+	insert_stmt += "%s);"
+
+	print get_timestamp() + ": Now preparing to insert rows into " + DOWNLOAD_DATA_TABLE + "\n"
+
+	records = reader(RESTAURANT_DEST_FILE, delimiter=',', quotechar='"')
+
+	for line in records:
+		record_tuple = tuple(line)
+		
+		try:
+			#insert_cur.execute(insert_stmt + add_pkey + analyze_query)
+			insert_cur.execute(insert_stmt)
+		except Exception as e:
+			#print get_timestamp() + ": Unable to create table and bulk upload"
+			print get_timestamp() + ": Bulk insert failed"
+			return render_template("bulkInsertGradesResults.html", outcome="failed on record (" + ",".join(line) + ") with error: " + str(e))
+
+	#Also prepare quriers to add primary key and run an analyze after bulk upload of data
+	add_pkey = "ALTER TABLE " + DOWNLOAD_DATA_TABLE + " ADD PRIMARY KEY (id);"
+	analyze_query = "ANALYZE " + DOWNLOAD_DATA_TABLE + ";"
 
 	try:
 		insert_cur.execute(add_pkey)
