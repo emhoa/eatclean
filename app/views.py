@@ -33,10 +33,12 @@ def bulkInsert():
         except Exception as e:
        	        print "Unable to connect to the database"
 	cur = conn.cursor()
-	cur.execute(select_query)
+	
+	try:
+		cur.execute(select_query)
 
 	mexican_eateries = ""
-	for (dba, building, street, boro, phone, score, grade, grade_date) in cursor:
+	for (dba, building, street, boro, phone, score, grade, grade_date) in cur:
 		mexican_eateris += "{}, {} {} in {} (tel: {}) (Grade: {} on {%b/%d/%Y} Score: {})\n".format(dba, building, street, boro, phone, grade, grade_date, score) 
 	return render_template("bulkInsertGradesResults.html", outcome=Markup(mexican_eateries))
 
