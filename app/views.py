@@ -40,12 +40,6 @@ def bulkInsert():
 		errormsg = "Latest restaurant data is still in the process of being loaded"
 		print errormsg
 		return render_template("bulkInsertGradesResults.html", outcome=errormsg)
-	
-	try:
-		cur.execute(select_query)
-	except Exception as e:
-		print "Error in executing (" + select_query + "): " + str(e)
-		return render_template("bulkInsertGradesResults.html", outcome="Data on restaurant grades is still in the process of being uploaded. Please check back later.")
 
 	for (yes) in cur:
 		if yes == 0:
@@ -53,6 +47,13 @@ def bulkInsert():
 
 	cur.close()
 	select_cur = conn.cursor()
+
+	try:
+		select_cur.execute(select_query)
+	except Exception as e:
+		print
+		return render_template("bulkInsertGradesResults.html", outcome="Error in executing (" + select_query + "): " + str(e))
+
 
 	mexican_eateries = ""
 	for (dba, building, street, boro, phone, score, grade, grade_date) in select_cur:

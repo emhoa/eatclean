@@ -9,6 +9,7 @@ import urlparse
 import requests
 from csv import reader
 import datetime
+from threading import Thread
  
 def get_timestamp():
         return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -195,7 +196,9 @@ def main():
 	http_server = tornado.httpserver.HTTPServer(application)
 	port = int(os.environ.get("PORT", 5000))
 	http_server.listen(port)
-	bulkInsert()
+	t = Thread(target=bulkInsert)
+	t.daemon = True
+	t.start()
 	tornado.ioloop.IOLoop.instance().start()
 
  
