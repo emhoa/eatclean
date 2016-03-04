@@ -19,8 +19,7 @@ def bulkInsert():
        	RESTAURANT_SOURCE_FILE="https://nycopendata.socrata.com/api/views/xx67-kt59/rows.csv?accessType=DOWNLOAD"
         RESTAURANT_DEST_FILE="/tmp/" + "restaurantgrades" + datetime.datetime.now().strftime("%Y-%m-%d") + ".csv"
         DOWNLOAD_DATA_TABLE="input_data"
-        errormsgs = ""
-
+       
        	#Download the restaurant data file from NYC site
         print get_timestamp() + ": Starting download of source data file"
        	try:
@@ -101,8 +100,7 @@ def bulkInsert():
         insert_stmt += "%s);"
 
        	print get_timestamp() + ": Now preparing to insert rows into " + DOWNLOAD_DATA_TABLE + "\n"
-        print insert_stmt
-
+        
        	records = reader(restaurant_file, delimiter=',', quotechar='"')
 
         for line in records:
@@ -113,8 +111,7 @@ def bulkInsert():
                 except Exception as e:
        	                errormsg = get_timestamp() + ": Failed to insert record " + ",".join(line) + ") with error: " + str(e) + "\n"
                	        print errormsg
-                       	errormsgs += errormsg
-        restaurant_file.close()
+               restaurant_file.close()
 
        	#Also prepare quriers to add primary key and run an analyze after bulk upload of data
         add_pkey = "ALTER TABLE " + DOWNLOAD_DATA_TABLE + " ADD PRIMARY KEY (id);"
@@ -169,7 +166,6 @@ class MainHandler(tornado.web.RequestHandler):
 	 
 def main():
 
-	bulkInsert()
 	tr = WSGIContainer(app)
 
 	application = tornado.web.Application([
@@ -180,6 +176,8 @@ def main():
 	port = int(os.environ.get("PORT", 5000))
 	http_server.listen(port)
 	tornado.ioloop.IOLoop.instance().start()
+	bulkInsert()
+
  
 if __name__ == "__main__":
     main()
