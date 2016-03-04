@@ -48,7 +48,7 @@ def bulkInsert():
        	        print "Unable to connect to the database"
 		exit()
         
-	create_lock_table_query = "create table if not exists restaurant_data_available (yes int); insert into restaurant_data_available (yes) values (0);"
+	create_lock_table_query = "drop table if exists restaurant_data_available; create table restaurant_data_available (yes int); insert into restaurant_data_available (yes) values (0);"
 	lock_cur = conn.cursor()
 
 	try:
