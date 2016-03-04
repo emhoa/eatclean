@@ -120,6 +120,7 @@ def bulkInsert():
 	insert_stmt += "%s);"
 
 	print get_timestamp() + ": Now preparing to insert rows into " + DOWNLOAD_DATA_TABLE + "\n"
+	print insert_stmt
 
 	records = reader(RESTAURANT_DEST_FILE, delimiter=',', quotechar='"')
 
@@ -128,6 +129,7 @@ def bulkInsert():
 		
 		try:
 			#insert_cur.execute(insert_stmt + add_pkey + analyze_query)
+			print record_tuple
 			insert_cur.execute(insert_stmt, record_tuple)
 		except Exception as e:
 			#print get_timestamp() + ": Unable to create table and bulk upload"
