@@ -61,8 +61,8 @@ def bulkInsert():
 		return render_template("bulkInsertGradesResults.html", outcome="Error in executing (" + select_query + "): " + str(e))
 
 
-	mexican_eateries = ""
+	mexican_eateries = "Top 10 Thai restaurants with cleanest inspection scores<br>"
 	for (dba, building, street, boro, phone, score, grade, grade_date) in select_cur:
-		mexican_eateries += "{}, {} {} in {} (tel: {}) (Grade: {} Score: {})<br>".format(dba, building, street, boro, phone, grade, score) 
+		mexican_eateries += "* {}, {} {} in {} (tel: {}) (Grade: {} Score: {})<br>".format(dba, building, street, boro, phone, grade, score) 
 	return render_template("bulkInsertGradesResults.html", outcome=Markup(mexican_eateries))
 
