@@ -11,6 +11,7 @@ from app import app
 from flask import render_template
 from flask import request
 
+
 @app.route('/')
 @app.route('/restaurants')
 def index():
@@ -61,5 +62,5 @@ def bulkInsert():
 	mexican_eateries = ""
 	for (dba, building, street, boro, phone, score, grade, grade_date) in select_cur:
 		mexican_eateries += "{}, {} {} in {} (tel: {}) (Grade: {} Score: {})\n".format(dba, building, street, boro, phone, grade, score) 
-	return render_template("bulkInsertGradesResults.html", outcome=Markup(mexican_eateries))
+	return render_template("bulkInsertGradesResults.html", outcome=mexican_eateries)
 
