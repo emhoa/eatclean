@@ -47,9 +47,9 @@ def bulkInsert():
 	if len(cur.fetchall()) != 1:
 		return render_template("bulkInsertGradesResults.html", outcome="Data on restaurant grades is still in the process of being uploaded. Please check back later.")
 
-	yes = cur.fetchone()
-	if yes == 0:
-		return render_template("bulkInsertGradesResults.html", outcome="Data on restaurant grades is still in the process of being uploaded. Please check back later.")
+	for (yes) in cur.fetchone()
+		if yes == 0:
+			return render_template("bulkInsertGradesResults.html", outcome="Data on restaurant grades is still in the process of being uploaded. Please check back later.")
 
 	cur.close()
 	select_cur = conn.cursor()
@@ -61,7 +61,7 @@ def bulkInsert():
 		return render_template("bulkInsertGradesResults.html", outcome="Error in executing (" + select_query + "): " + str(e))
 
 
-	mexican_eateries = "Top 10 Thai restaurants with cleanest inspection scores<br>"
+	mexican_eateries = "Top 10 Thai restaurants with most recent cleanest inspection scores<br>"
 	for (dba, building, street, boro, phone, score, grade, grade_date) in select_cur:
 		mexican_eateries += "* {}, {} {} in {} (tel: {}) (Grade: {} Score: {})<br>".format(dba, building, street, boro, phone, grade, score) 
 	return render_template("bulkInsertGradesResults.html", outcome=Markup(mexican_eateries))
