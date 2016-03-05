@@ -43,11 +43,10 @@ def bulkInsert():
 		errormsg = "Latest restaurant data is still in the process of being loaded"
 		print errormsg
 		return render_template("bulkInsertGradesResults.html", outcome=errormsg)
-
-	if len(cur.fetchall()) != 1:
+	yes = cur.fetchall()
+	if len(yes) != 1:
 		return render_template("bulkInsertGradesResults.html", outcome="Data on restaurant grades is still in the process of being uploaded. Please check back later.")
 	
-	yes = cur.fetchone()
 	if yes[0] == 0:
 		return render_template("bulkInsertGradesResults.html", outcome="Data on restaurant grades is still in the process of being uploaded. Please check back later.")
 
