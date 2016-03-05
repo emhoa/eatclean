@@ -47,8 +47,8 @@ def bulkInsert():
 	if len(cur.fetchall()) != 1:
 		return render_template("bulkInsertGradesResults.html", outcome="Data on restaurant grades is still in the process of being uploaded. Please check back later.")
 
-	for (yes) in cur.fetchone()
-		if yes == 0:
+	for (yes) in cur.fetchone():
+		if yes[0] == 0:
 			return render_template("bulkInsertGradesResults.html", outcome="Data on restaurant grades is still in the process of being uploaded. Please check back later.")
 
 	cur.close()
